@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src = "jquery-3.6.0.min.js"></script>
+    <style>
+        .itemList{
+            border:1px solid gray;
+            border-radius: 5px;
+            padding : 10px;
+        }
+        span {
+            border : 1px solid black;
+            background-color: white;
+            padding: 3px;
+            margin : 3px;
+        }
+
+        button{
+            margin : 3%;
+        }
+    </style>
+    <script> 
+        //========================================================================================
+        function gid(id){ return document.getElementById(id);}
+        //========================================================================================
+        //단어 토큰 (span) click 이벤트 핸들러 정의
+        //click한 토큰 자신을 done 영역으로 이동시킨다.
+                function checkParentId(){
+            this.parentNode.getAttribute('id');}
+        //========================================================================================
+        function tokenMove(){
+            if(gid(this.parentNode.getAttribute('id')) == gid("ToDo")){
+                gid("Done").appendChild(this);
+            }
+            else{
+                gid("ToDo").appendChild(this);
+            }
+        }
+        //========================================================================================
+        function deleteButtenHandler(){
+            $(this.parentNode).hide();
+        }
+        //========================================================================================
+        function newItemHandler(){
+            if(event.keyCode == 13){
+                this.value = this.value.trim(); //불필요한 부분(좌우 여백)을 삭제
+                if(this.value.length > 0){ // 여백이 삭제된 후에도 내용이 있으면 실행
+                    let newItem = document.createElement("span");
+                    let newButton = document.createElement("button");
+                    let buttonText = document.createTextNode('X');
+                    newItem.innerHTML = this.value;
+                   
+                    newButton.appendChild(buttonText);
+                    newItem.appendChild(newButton);
+                    newItem.addEventListener(`click`,tokenMove);
+                    newButton.addEventListener(`click`,deleteButtenHandler);
+                    gid("ToDo").appendChild(newItem);              
+                    
+                    this.value = "" //실행한 후 텍스트 박스를 비워줌
+                }
+            }
+        }
+        //========================================================================================
+
+        //========================================================================================
+        window.onload = function(){
+            $("#newItem").keydown(newItemHandler);
+            $("span").click(tokenMove);
+        }
+    </script>
+</head>
+<body>
+    <h1>Final Project Test</h1>
+    <hr>
+    <div id = "ToDoMeMo">
+    <h2>해야 할 일</h2>
+    <input id = "newItem" placeholder="해야 할 일을 입력해 주세요"><br>
+    <hr>
+    </div>
+    <div id = "ToDo" class = "itemList">
+        <h1>ToDo</h1>
+        <hr>       
+    </div>
+    <div id ="Done" class = "itemList">
+        <h1>Done</h1>
+        <hr>
+    </div>
+</body>
+</html>
